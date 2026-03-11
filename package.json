@@ -8,15 +8,28 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "postinstall": "npm run prod"
+        "postinstall": "npm run prod",
+        "prepare": "husky",
+        "lint": "eslint resources/js/",
+        "lint:fix": "eslint resources/js/ --fix",
+        "format": "prettier --write resources/js/",
+        "format:check": "prettier --check resources/js/"
     },
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "autoprefixer": "^10.4.4",
         "axios": "^0.25",
+        "eslint": "^10.0.3",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-vue": "^10.8.0",
+        "husky": "^9.0.11",
         "laravel-mix": "^6.0.6",
+        "lint-staged": "^15.2.2",
         "lodash": "^4.17.19",
         "postcss": "^8.4.12",
+        "prettier": "^3.8.1",
         "tailwindcss": "^3.0.23",
+        "typescript": "^5.9.3",
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
@@ -24,5 +37,14 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
         "vue": "^3.2.32"
+    },
+    "lint-staged": {
+        "resources/js/**/*.{js,vue}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.php": [
+            "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+        ]
     }
 }

@@ -66,16 +66,25 @@ class UserController extends Controller
                 Rule::unique('users', 'email')
                     ->ignore(Auth::user()->getKey()),
             ],
-            'avatar_url' => ['active_url'],
-            'bio' => ['string'],
+            'avatar_url' => ['nullable', 'active_url'],
+            'bio' => ['nullable', 'string'],
         ]);
+
+        Auth::user()->update([
+            'name' => request('name'),
+            'email' => request('email'),
+            'avatar_url' => request('avatar_url'),
+            'bio' => request('bio'),
+        ]);
+
         return redirect()->route('user.edit');
     }
 
     public function destroy()
     {
+        $user = Auth::user();
         Auth::logout();
-        Auth::user()->delete();
+        $user->delete();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
         return redirect()->route('users.create');

@@ -23,6 +23,8 @@ class CommentController extends Controller
 
     public function update(Comment $comment)
     {
+        $this->authorize('update', $comment);
+
         request()->validate([
             'content' => ['required'],
         ]);
@@ -35,6 +37,8 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
+        $this->authorize('delete', $comment);
+
         $comment->delete();
         return redirect()->back();
     }

@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+# Skip checks for documentation-only changes
+CHANGED_FILES=$(git diff --name-only HEAD @{push} 2>/dev/null || git diff --name-only HEAD origin/main 2>/dev/null || echo "")
+NON_DOC_FILES=$(echo "$CHANGED_FILES" | grep -vE '\.(md|txt|rst)$' | grep -vE '^docs/' || true)
+
+if [ -z "$NON_DOC_FILES" ]; then
+    echo "Documentation-only changes detected. Skipping pre-push checks."
+    exit 0
+fi
+
+echo "Running tests before push..."
+php artisan test
+
+echo "Running static analysis..."
+vendor/bin/phpstan analyse || true

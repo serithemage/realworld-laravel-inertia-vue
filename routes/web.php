@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', HomeController::class)->name('home');
-Route::get('feed', ArticleFeedController::class)->name('feed');
+Route::get('feed', ArticleFeedController::class)->middleware(['auth'])->name('feed');
 Route::get('articles', [ArticleController::class,'index']);
 Route::get('articles/create', [ArticleController::class,'create'])->middleware(['auth'])->name('articles.create');
 Route::post('articles', [ArticleController::class,'store'])->middleware(['auth']);
@@ -33,7 +33,7 @@ Route::delete('articles/{article}', [ArticleController::class,'destroy'])->middl
 Route::post('articles/{article}/comments', [CommentController::class,'store'])->middleware(['auth']);
 Route::get('tags/{tag:slug}', [TagController::class,'show'])->name('tags.show');
 Route::get('login', [SessionController::class,'create'])->middleware(['guest'])->name('login');
-Route::post('login', [SessionController::class,'store'])->middleware(['guest']);
+Route::post('login', [SessionController::class,'store'])->middleware(['guest', 'throttle:5,1']);
 Route::delete('logout', [SessionController::class,'destroy'])->middleware(['auth']);
 Route::get('register', [UserController::class,'create'])->middleware(['guest'])->name('users.create');
 Route::post('register', [UserController::class,'store']);
